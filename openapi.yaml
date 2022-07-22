@@ -55,7 +55,7 @@ paths:
           $ref: "#/components/responses/400BadRequest"
         401:
           $ref: "#/components/responses/401UnauthorizedError"
-# User Register
+# register
   /register:
     post:
       tags:
@@ -87,11 +87,11 @@ paths:
           $ref: "#/components/responses/400BadRequest"
         500:
           $ref: "#/components/responses/500InternalServerError"
-
+          
   #-------------------------------
   # Users Section
   #-------------------------------
-  /user/:id:
+  /user/{id}:
     parameters:
       - in: path
         name: id
@@ -310,7 +310,7 @@ paths:
 #-------------------------------
 
 # Read Comment
-  /comments:
+  /comments/{id}:
     parameters:
       - in: path
         name: id
@@ -351,7 +351,7 @@ paths:
           $ref: "#/components/responses/500InternalServerError"  
 
 # post comment
-  /comments/commentId:
+  /comments/{commentId}:
     parameters:
       - in: path
         name: commentId
