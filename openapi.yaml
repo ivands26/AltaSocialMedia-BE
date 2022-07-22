@@ -1,0 +1,753 @@
+openapi: 3.0.0
+info:
+  title: Sosial Media AltaAPI
+  description: AltaSocialMedia API -  Dokumentasi API dari aplikasi Social Media 
+  version: 1.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/rizkicahyo/APISocialMediApps/1.0.0
+  # - description: Production phase server
+  #   url: http://18.136.202.111:8001/api
+tags:
+  - name: Auth
+    description: API Endpoint for Authentication
+  - name: User
+    description: API Endpoint for manage Users
+  - name: Posting
+    description: API Endpoint for manage Posting
+  - name: Comment
+    description: API Endpoint for Comment
+paths:
+  #-------------------------------
+  # Auth Section
+  #-------------------------------
+  /login:
+    post:
+      tags:
+        - "Auth"
+      summary: user login with credentials
+      description: Untuk login Ke dalam Sistem dengan credentials yang dimiliki
+      requestBody:
+        $ref: '#/components/requestBodies/LoginBody'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "Success Login"
+                  data:
+                    $ref: "#/components/schemas/SimpleUserSchema"
+                  token:
+                    type: string
+                  status:
+                    type: boolean
+                    example: true
+        400:
+          $ref: "#/components/responses/400BadRequest"
+        401:
+          $ref: "#/components/responses/401UnauthorizedError"
+# User Register
+  /register:
+    post:
+      tags:
+        - "Auth"
+      summary: Register new user
+      description: Create new user
+      requestBody:
+        $ref: '#/components/requestBodies/UsersBody'
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 201
+                  message:
+                    type: string
+                    example: "Success register user"
+                  data:
+                    $ref: "#/components/schemas/UserResponse"
+                  status:
+                    type: boolean
+                    example: true
+        400:
+          $ref: "#/components/responses/400BadRequest"
+        500:
+          $ref: "#/components/responses/500InternalServerError"
+
+  #-------------------------------
+  # Users Section
+  #-------------------------------
+  /user/:id:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+        description: the user ID
+    # Update User
+    put:
+      tags:
+        - "User"
+      security:
+        - bearerAuth: []
+      description: Mengubah Data User berdasarkan id yang ada
+      summary: Update user data by user_id
+      requestBody:
+        $ref : "#/components/requestBodies/UsersUpdate"
+      responses:
+        200:
+          description: OK
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: Success update user data
+                  data:
+                    $ref: "#/components/schemas/UserSchema"
+                  status:
+                    type: boolean
+                    example: true
+        401:
+          $ref: "#/components/responses/401UnauthorizedError"
+        404:
+          $ref: "#/components/responses/404NotFound"
+    # Delete user
+    delete:
+      tags:
+        - "User"
+      security:
+        - bearerAuth: []
+      description: Menghapus Data User yang sudah tidak digunakan
+      summary: Delete user data by id
+      responses:
+        200:
+          description: "Success Request"
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: Success delete user data
+                  data:
+                    type: object
+                  status:
+                    type: boolean
+                    example: true
+        400:
+          $ref: "#/components/responses/400BadRequest"
+        401:
+          $ref: "#/components/responses/401UnauthorizedError"
+  
+#-------------------------------
+# Posting Section
+#-------------------------------
+  /content:
+    get:
+      # parameters:
+      # - name: byMe
+      #   in: query
+      #   schema:
+      #     type: boolean
+      #   description: Show All Content
+      tags:
+        - "Posting"
+      description: Menampilkan semua events
+      summary: get all events
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "Success get all events"
+                  data:
+                    $ref: "#/components/schemas/ListPostingSchema"
+                  status:
+                    type: boolean
+                    example: true
+        400:
+          $ref: "#/components/responses/400BadRequest"
+        401:
+          $ref: "#/components/responses/401UnauthorizedError"
+        500:
+          $ref: "#/components/responses/500InternalServerError"
+    post:
+      tags:
+        - "Posting"
+      security:
+        - bearerAuth: []
+      description: Membuat posting baru
+      summary: Create a new content
+      requestBody:
+        $ref : "#/components/requestBodies/InsertPosting"
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 201
+                  message:
+                    type: string
+                    example: "Success created new event"
+                  data:
+                    $ref: "#/components/schemas/PostingFullResponse"
+                  status:
+                    type: boolean
+                    example: true
+        400:
+          $ref: "#/components/responses/400BadRequest"
+        401:
+          $ref: "#/components/responses/401UnauthorizedError"
+        500:
+          $ref: "#/components/responses/500InternalServerError"
+    # Update Posting
+    put:
+      tags:
+        - "Posting"
+      security:
+        - bearerAuth: []
+      description: Mengubah Data Content berdasarkan id yang ada
+      summary: Update content data by id
+      requestBody:
+        $ref : "#/components/requestBodies/InsertPosting"
+      responses:
+        200:
+          description: OK
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: Success update Content
+                  data:
+                    $ref: "#/components/schemas/PostingFullResponse"
+                  status:
+                    type: boolean
+                    example: true
+        401:
+          $ref: "#/components/responses/401UnauthorizedError"
+        404:
+          $ref: "#/components/responses/404NotFound"
+        500:
+          $ref: "#/components/responses/500InternalServerError"
+    # Delete Posting
+    delete:
+      tags:
+        - "Posting"
+      security:
+        - bearerAuth: []
+      description: Menghapus Content yang sudah berlalu
+      summary: Delete Content data by id
+      responses:
+        200:
+          description: OK
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: Success delete Content data
+                  data:
+                    type: object
+                  status:
+                    type: boolean
+                    example: true
+        400:
+          $ref: "#/components/responses/400BadRequest"
+        401:
+          $ref: "#/components/responses/401UnauthorizedError"
+#-------------------------------
+# Comment Section
+#-------------------------------
+
+# Read Comment
+  /comments:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+        description: the event id
+    get:
+      tags:
+        - "Comment"
+      description: Retrieve all comment in some Content 
+      summary: Get all comment on Content
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "Success get all comments on Content"
+                  data:
+                    $ref: "#/components/schemas/ListCommentSchema"
+                  status:
+                    type: boolean
+                    example: true
+        400:
+          $ref: "#/components/responses/400BadRequest"
+        401:
+          $ref: "#/components/responses/401UnauthorizedError"
+        500:
+          $ref: "#/components/responses/500InternalServerError"  
+
+# post comment
+  /comments/commentId:
+    parameters:
+      - in: path
+        name: commentId
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+        description: the comment id
+    post:
+      tags:
+        - Comment
+      security:
+        - bearerAuth: []
+      description: Post comment in some Content
+      summary: Create comment on Content
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                comment:
+                  type: string
+                  example: Keduax!!
+        
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "Success post new comment"
+                  data:
+                    $ref: "#/components/schemas/CommentFullResponse"
+                  status:
+                    type: boolean
+                    example: true
+        400:
+          $ref: "#/components/responses/400BadRequest"
+        401:
+          $ref: "#/components/responses/401UnauthorizedError"
+        500:
+          $ref: "#/components/responses/500InternalServerError"
+
+# Delete Comment
+    delete:
+      tags:
+        - "Comment"
+      security:
+        - bearerAuth: []
+      description: Menghapus Content yang sudah berlalu
+      summary: Delete Content data by id
+      responses:
+        200:
+          description: OK
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: Success delete Content data
+                  data:
+                    type: object
+                  status:
+                    type: boolean
+                    example: true
+        400:
+          $ref: "#/components/responses/400BadRequest"
+        401:
+          $ref: "#/components/responses/401UnauthorizedError"
+#-------------------------------
+  
+components:
+  #-------------------------------
+  # Reusable security schemes
+  #-------------------------------
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  #-------------------------------
+  # Reusable schemas (data models)
+  #-------------------------------
+  schemas:
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          example: jeff@mail.com
+        password:
+          type: string
+          example: admin1234
+    SimpleUserSchema:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+            type: string
+            example: jeff
+        email:
+            type: string
+            example: jeff@mail.com
+        password:
+            type: string
+            example: admin1234
+    RegisterRequest:
+      type: object
+      required:
+          - name
+          - email
+          - password
+      properties:
+          name:
+            type: string
+            example: jeff
+          email:
+            type: string
+            example: jeff@tesing.com
+          password:
+            type: string
+            example: admin1234
+    UserUpdateRequest:
+      type: object
+      required:
+          - name
+          - email
+          - password
+      properties:
+          name:
+            type: string
+            example: jeff
+          email:
+            type: string
+            example: jeff@tesing.com
+          password:
+            type: string
+            example: admin1234
+    UserSchema:
+      type: object
+      required:
+          - name
+          - email
+          - password
+      properties:
+          username:
+            type: string
+            example: gadipuranto
+          fullname:
+            type: string
+            example: Galang Adi Puranto
+          dob:
+            type: string
+            example: "1999-10-13"
+          address:
+            type: string
+            example: "Sleman"
+          email:
+            type: string
+            example: gal@test.com
+          phone:
+            type: string
+            example: "08986817477"
+          password:
+            type: string
+            example: admin1234
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Galang Adi Puranto
+        email:
+           type: string
+           example: gal@test.com
+        phone:
+          type: string
+          example: "08986817477"
+    PostingSchema:
+      type: object
+      required:
+          - content
+          - description
+      properties:
+          content:
+            type: string
+            example: Konten YouTube Bisa Jadi Jaminan Utang ke Bank, Apa Syaratnya?
+          description:
+            type: string
+            example: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean faucibus fermentum tellus.
+    PostingFullResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        content:
+            type: string
+            example: Konten YouTube Bisa Jadi Jaminan Utang ke Bank, Apa Syaratnya?
+        description:
+            type: string
+            example: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean faucibus fermentum tellus.
+        user_id:
+          type: integer
+          example: 1
+        created_at:
+          type: string
+          format: date-time
+          example: "2022-05-13 07:15:51.093"
+        updated_at:
+          type: string
+        deleted_at:
+          type: string
+    ListPostingSchema:
+      type: array
+      items:
+        $ref: '#/components/schemas/PostingFullResponse'
+
+    CommentSchema:
+      type: object
+      required:
+        - "comment"
+      properties:
+        comment:
+          type: string
+          example: Pertamax!!
+    CommentFullResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        event_id:
+          type: integer
+          example: 1
+        user_id:
+          type: integer
+          example: 1
+        comment:
+          type: string
+          example: Pertamax!!
+        created_at:
+          type: string
+          format: date-time
+          example: "2022-05-13 07:15:51.093"
+        updated_at:
+          type: string
+        deleted_at:
+          type: string
+    ListCommentSchema:
+      type: array
+      items:
+        $ref: '#/components/schemas/CommentFullResponse'
+
+#-------------------------------
+# Reusable request bodies
+#-------------------------------
+  requestBodies:
+    LoginBody:
+      description: A JSON object containing login information
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LoginRequest'
+    UsersBody:
+      description: A JSON object containing users information
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RegisterRequest'
+    UsersUpdate:
+      description: A JSON object containing users information
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserUpdateRequest'
+    InsertPosting:
+      description: A JSON object containing events information
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PostingSchema'
+    PostComment:
+      description: A JSON object containing comment information
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CommentSchema'
+#-------------------------------
+# Reusable responses
+#-------------------------------
+  responses:
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+              message: 
+                type: string
+              data:
+                type: object
+              status:
+                type: boolean
+          example:
+            code: 400
+            message: Bad Request
+            data: 
+            status: false
+    401UnauthorizedError:
+      description: Access token is missing or invalid
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+              message: 
+                type: string
+              data:
+                type: object
+              status:
+                type: boolean
+          example:
+            code: 401
+            message: Access token is missing or invalid
+            data:
+            status: false
+    404NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+              message: 
+                type: string
+              data:
+                type: object
+              status:
+                type: boolean
+          example:
+            code: 404
+            message: Not Found
+            data:
+            status: false
+    500InternalServerError:
+      description: "Error from server"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+              message: 
+                type: string
+              data:
+                type: object
+              status:
+                type: boolean
+          example:
+            code: 500
+            message: There is some problem on server
+            data: 
+            status: false
