@@ -1,9 +1,11 @@
 package data
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/AltaProject/AltaSocialMedia/domain"
+	"github.com/AltaProject/AltaSocialMedia/feature/common"
 	"gorm.io/gorm"
 )
 
@@ -35,4 +37,18 @@ func (ud *userData) GetSpecificUser(userId int) (domain.User, error) {
 		return domain.User{}, err
 	}
 	return temp.ToModel(), nil
+}
+
+func (ud *userData) Login(email string, password string) (username string, token string, err error) {
+	userData := User{}
+	ud.db.Where("email = ?", email).First(&userData)
+	check := common.CheckPasswordHash(password, userData.Password)
+
+	if !check {
+		return "", "", fmt.Errorf("error")
+	}
+
+	token = common.GenerateToken(int(userData.ID))
+
+	return userData.Username, token, nil
 }

@@ -19,3 +19,8 @@ func (r *RegisterFormat) ToModel() domain.User {
 		No_HP:    r.No_HP,
 	}
 }
+
+type LoginFormat struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}

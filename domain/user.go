@@ -19,9 +19,11 @@ type UserHandler interface {
 type UserUseCases interface {
 	Register(newUser User) (User, error)
 	GetSpecificUser(userId int) (User, error)
+	Login(email string, password string) (username string, token string, err error)
 }
 
 type UserData interface {
 	Register(newUser User) (User, error)
 	GetSpecificUser(userId int) (User, error)
+	Login(email string, password string) (username string, token string, err error)
 }
