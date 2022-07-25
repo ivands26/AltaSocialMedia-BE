@@ -14,7 +14,7 @@ tags:
     description: API Endpoint for Authentication
   - name: User
     description: API Endpoint for manage Users
-  - name: Posting
+  - name: Content
     description: API Endpoint for manage Posting
   - name: Comment
     description: API Endpoint for Comment
@@ -55,11 +55,10 @@ paths:
           $ref: "#/components/responses/400BadRequest"
         401:
           $ref: "#/components/responses/401UnauthorizedError"
-# register
   /register:
     post:
       tags:
-        - "Auth"
+        - "User"
       summary: Register new user
       description: Create new user
       requestBody:
@@ -87,7 +86,6 @@ paths:
           $ref: "#/components/responses/400BadRequest"
         500:
           $ref: "#/components/responses/500InternalServerError"
-          
   #-------------------------------
   # Users Section
   #-------------------------------
@@ -177,7 +175,7 @@ paths:
       #     type: boolean
       #   description: Show All Content
       tags:
-        - "Posting"
+        - "Content"
       description: Menampilkan semua events
       summary: get all events
       responses:
@@ -207,7 +205,7 @@ paths:
           $ref: "#/components/responses/500InternalServerError"
     post:
       tags:
-        - "Posting"
+        - "Content"
       security:
         - bearerAuth: []
       description: Membuat posting baru
@@ -240,9 +238,10 @@ paths:
         500:
           $ref: "#/components/responses/500InternalServerError"
     # Update Posting
+  /content/{id}:
     put:
       tags:
-        - "Posting"
+        - "Content"
       security:
         - bearerAuth: []
       description: Mengubah Data Content berdasarkan id yang ada
@@ -275,9 +274,10 @@ paths:
         500:
           $ref: "#/components/responses/500InternalServerError"
     # Delete Posting
+  /content/{id}:
     delete:
       tags:
-        - "Posting"
+        - "Content"
       security:
         - bearerAuth: []
       description: Menghapus Content yang sudah berlalu
@@ -483,6 +483,7 @@ components:
           - name
           - email
           - password
+          - phone
       properties:
           name:
             type: string
@@ -493,6 +494,9 @@ components:
           password:
             type: string
             example: admin1234
+          phone:
+            type: integer
+            example: 0843524312
     UserUpdateRequest:
       type: object
       required:
@@ -515,22 +519,14 @@ components:
           - name
           - email
           - password
+          - phone
       properties:
           username:
             type: string
-            example: gadipuranto
-          fullname:
-            type: string
-            example: Galang Adi Puranto
-          dob:
-            type: string
-            example: "1999-10-13"
-          address:
-            type: string
-            example: "Sleman"
+            example: jeff
           email:
             type: string
-            example: gal@test.com
+            example: 
           phone:
             type: string
             example: "08986817477"
@@ -544,14 +540,17 @@ components:
           type: integer
           example: 1
         name:
-          type: string
-          example: Galang Adi Puranto
+            type: string
+            example: jeff
         email:
-           type: string
-           example: gal@test.com
+            type: string
+            example: jeff@tesing.com
+        password:
+            type: string
+            example: admin1234
         phone:
-          type: string
-          example: "08986817477"
+            type: integer
+            example: 0843524312
     PostingSchema:
       type: object
       required:
@@ -606,7 +605,7 @@ components:
         id:
           type: integer
           example: 1
-        event_id:
+        content_id:
           type: integer
           example: 1
         user_id:
