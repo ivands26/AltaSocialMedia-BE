@@ -1,5 +1,7 @@
 package domain
 
+import "github.com/labstack/echo/v4"
+
 type User struct {
 	ID       int
 	Nama     string
@@ -7,6 +9,11 @@ type User struct {
 	Email    string
 	Password string
 	No_HP    string
+}
+
+type UserHandler interface {
+	Register() echo.HandlerFunc
+	GetSpecificUser() echo.HandlerFunc
 }
 
 type UserUseCases interface {

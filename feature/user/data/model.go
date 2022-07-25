@@ -2,11 +2,10 @@ package data
 
 import (
 	"github.com/AltaProject/AltaSocialMedia/domain"
-	"gorm.io/gorm"
+	// "gorm.io/gorm"
 )
 
 type User struct {
-	gorm.Model
 	ID       int    `json:"id" form:"id" gorm:"primaryKey:autoIncrement"`
 	Nama     string `json:"nama" form:"nama" validate:"required"`
 	Username string `json:"username" form:"username"`
