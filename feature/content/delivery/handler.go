@@ -27,7 +27,7 @@ func New(e *echo.Echo, cs domain.ContentUseCases) {
 func (cs *contentHandler) PostContent() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		//userId := common.ExtractData(c)
-		var temp RegisterFormat
+		var temp PostingFormat
 		err := c.Bind(&temp)
 
 		if err != nil {
@@ -35,7 +35,7 @@ func (cs *contentHandler) PostContent() echo.HandlerFunc {
 			c.JSON(http.StatusBadRequest, "tidak bisa membaca input")
 		}
 
-		// data, err := cs.contentCases.Posting(temp.ToModel())
+		data, err := cs.contentCases.Posting(temp.ToModel())
 
 		if err != nil {
 			log.Println("tidak memproses data", err)
