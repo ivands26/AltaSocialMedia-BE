@@ -63,3 +63,8 @@ func (ud *userCase) GetSpecificUser(userId int) (domain.User, error) {
 
 	return data, nil
 }
+
+func (ud *userCase) Login(email string, password string) (username string, token string, err error) {
+	username, token, err = ud.userData.Login(email, password)
+	return username, token, err
+}

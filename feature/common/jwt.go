@@ -7,6 +7,7 @@ import (
 	"github.com/AltaProject/AltaSocialMedia/config"
 	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func GenerateToken(ID int) string {
@@ -38,4 +39,9 @@ func ExtractData(c echo.Context) int {
 	}
 
 	return -1
+}
+
+func CheckPasswordHash(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
 }

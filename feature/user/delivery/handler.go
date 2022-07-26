@@ -20,6 +20,7 @@ func New(e *echo.Echo, us domain.UserUseCases) {
 	handler := &userHandler{
 		userUsecase: us,
 	}
+	e.POST("/login", handler.Login())
 	e.POST("/register", handler.Register())
 	e.GET("/profile", handler.GetSpecificUser(), middleware.JWTWithConfig(middlewares.UseJWT([]byte(config.SECRET))))
 }
@@ -64,4 +65,28 @@ func (us *userHandler) GetSpecificUser() echo.HandlerFunc {
 			"data":    data,
 		})
 	}
+}
+
+func (us *userHandler) Login() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		var userLogin LoginFormat
+		errLog := c.Bind(&userLogin)
+		if errLog != nil {
+			return c.JSON(http.StatusBadRequest, "email atau password salah")
+		}
+		username, token, err := us.userUsecase.Login(userLogin.Email, userLogin.Password)
+		if err != nil {
+			return c.JSON(http.StatusBadRequest, "login gagal")
+		}
+		data := map[string]interface{}{
+			"username": username,
+			"token":    token,
+		}
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "login berhasil",
+			"data":    data,
+		})
+
+	}
+
 }
