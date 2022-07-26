@@ -20,6 +20,6 @@ type ContentUseCases interface {
 }
 
 type ContentData interface {
-	Posting(newContent Content) (Content, error)
+	AddNewContent(newContent Content) (Content, error)
 	GetContentId(contentId int) (Content, error)
 }
