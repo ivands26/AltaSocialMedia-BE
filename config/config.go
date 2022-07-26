@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+
 	"sync"
 
 	"github.com/joho/godotenv"
@@ -34,7 +35,7 @@ func GetConfig() *AppConfig {
 
 func initConfig() *AppConfig {
 	var defaultConfig AppConfig
-	err := godotenv.Load("setup.env")
+	err := godotenv.Load("local.env")
 
 	if err != nil {
 		log.Fatal("Cannot read configuration")
@@ -53,7 +54,7 @@ func initConfig() *AppConfig {
 	defaultConfig.Address = os.Getenv("Address")
 	cnv, err = strconv.Atoi(os.Getenv("Port"))
 	if err != nil {
-		log.Fatal("Cannot parse DB Port Variable")
+		log.Fatal("Cannot parse DB Port variable")
 		return nil
 	}
 	defaultConfig.Port = cnv

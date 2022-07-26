@@ -6,6 +6,8 @@ import (
 
 	"github.com/AltaProject/AltaSocialMedia/config"
 	"github.com/AltaProject/AltaSocialMedia/domain"
+
+	//"github.com/AltaProject/AltaSocialMedia/feature/user/domain"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )

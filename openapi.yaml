@@ -239,6 +239,14 @@ paths:
           $ref: "#/components/responses/500InternalServerError"
     # Update Posting
   /content/{id}:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+        description: the comment ID
     put:
       tags:
         - "Content"
@@ -274,7 +282,6 @@ paths:
         500:
           $ref: "#/components/responses/500InternalServerError"
     # Delete Posting
-  /content/{id}:
     delete:
       tags:
         - "Content"
@@ -318,7 +325,7 @@ paths:
         schema:
           type: integer
           minimum: 1
-        description: the event id
+        description: the content id
     get:
       tags:
         - "Comment"

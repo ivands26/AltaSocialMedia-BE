@@ -6,6 +6,7 @@ import (
 	mysql "github.com/AltaProject/AltaSocialMedia/infrastructure/database"
 
 	"github.com/AltaProject/AltaSocialMedia/config"
+	"github.com/AltaProject/AltaSocialMedia/factory"
 	"github.com/labstack/echo/v4"
 )
 
@@ -14,6 +15,8 @@ func main() {
 	db := mysql.InitDB(cfg)
 	mysql.MigrateData(db)
 	e := echo.New()
+
+	factory.InitFactory(e, db)
 
 	fmt.Println("==== STARTING PROGRAM ====")
 	dsn := fmt.Sprintf(":%d", config.SERVERPORT)
