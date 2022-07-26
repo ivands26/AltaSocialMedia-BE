@@ -5,6 +5,8 @@ import (
 	"log"
 
 	"github.com/AltaProject/AltaSocialMedia/domain"
+	"github.com/AltaProject/AltaSocialMedia/feature/user/data"
+
 	// "github.com/AltaProject/AltaSocialMedia/feature/user/data"
 	"github.com/go-playground/validator/v10"
 	"golang.org/x/crypto/bcrypt"
@@ -24,12 +26,12 @@ func New(ud domain.UserData, val *validator.Validate) domain.UserUseCases {
 }
 
 func (ud *userCase) Register(newUser domain.User) (domain.User, error) {
-	// var conv = data.FromModel(newUser)
-	// err := ud.valid.Struct(conv)
-	// if err != nil {
-	// 	log.Println("Error Validasi", err)
-	// 	return domain.User{}, err
-	// }
+	var conv = data.FromModel(newUser)
+	err := ud.valid.Struct(conv)
+	if err != nil {
+		log.Println("Error Validasi", err)
+		return domain.User{}, err
+	}
 	hashed, err := bcrypt.GenerateFromPassword([]byte(newUser.Password), bcrypt.DefaultCost)
 	if err != nil {
 		log.Println("gagal enkripsi password", err)

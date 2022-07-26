@@ -4,10 +4,10 @@ import "github.com/labstack/echo/v4"
 
 type User struct {
 	ID       int
-	Nama     string
-	Username string
-	Email    string
-	Password string
+	Nama     string `validate:"requered"`
+	Username string `validate:"requered"`
+	Email    string `validate:"requered"`
+	Password string `validate:"requered"`
 	No_HP    string
 }
 
