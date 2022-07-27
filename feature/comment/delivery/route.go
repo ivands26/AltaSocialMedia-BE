@@ -8,7 +8,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
-func RouteContent(e *echo.Echo, ch domain.CommentHandler) {
-	e.GET("/content/:id", ch.GetAllComment(), middleware.JWTWithConfig(middlewares.UseJWT([]byte(config.SECRET))))
+func RouteComment(e *echo.Echo, ch domain.CommentHandler) {
+	e.GET("/comment/:id", ch.GetAllComment(), middleware.JWTWithConfig(middlewares.UseJWT([]byte(config.SECRET))))
 
 }
