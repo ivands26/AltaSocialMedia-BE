@@ -3,7 +3,7 @@ package delivery
 import "github.com/AltaProject/AltaSocialMedia/domain"
 
 type PostingFormat struct {
-	Content string `json:"no_hp"`
+	Content string `json:"content"`
 }
 
 func (p *PostingFormat) ToModel() domain.Content {

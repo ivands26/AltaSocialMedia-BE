@@ -21,7 +21,12 @@ func New(cd domain.ContentData, v *validator.Validate) domain.ContentUseCases {
 	}
 }
 
-func (cd *contentUseCase) Posting(newContent domain.Content) (domain.Content, error) {
+func (cd *contentUseCase) Posting(userID int, newContent domain.Content) (domain.Content, error) {
+	if userID == -1 {
+		return domain.Content{}, errors.New("invalid user")
+	}
+
+	newContent.UserID = userID
 	posting, err := cd.dataContent.AddNewContent(newContent)
 
 	if err != nil {

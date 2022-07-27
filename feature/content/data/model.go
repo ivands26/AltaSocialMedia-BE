@@ -15,7 +15,7 @@ func (content *Content) toDomainContent() domain.Content {
 	return domain.Content{
 		ID:      int(content.ID),
 		Content: content.Content,
-		// UserID:  content.UserID,
+		UserID:  content.UserID,
 	}
 }
 
@@ -32,6 +32,6 @@ func ToLocalContent(data domain.Content) Content {
 	var res Content
 	res.ID = int(data.ID)
 	res.Content = data.Content
-	// res.UserID = data.UserID
+	res.UserID = data.UserID
 	return res
 }

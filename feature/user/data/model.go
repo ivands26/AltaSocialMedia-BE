@@ -14,7 +14,7 @@ type User struct {
 	Email    string         `json:"email" form:"email" validate:"required"`
 	Password string         `json:"password" form:"password" validate:"required"`
 	No_HP    string         `json:"no_hp" form:"no_hp"`
-	Content  []data.Content `gorm:"foreignKey:UserID;references:ID"`
+	Content  []data.Content `gorm:"foreignKey:UserID"`
 	// Comment  []data.Comment `gorm:"foreignKey:UserID;references:ID"`
 }
 
