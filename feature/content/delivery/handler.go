@@ -23,7 +23,7 @@ func New(cs domain.ContentUseCases) domain.ContentHandler {
 
 func (cs *contentHandler) PostContent() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		userID := common.ExtractData(c)
+		//userID := common.ExtractData(c)
 		var temp PostingFormat
 		err := c.Bind(&temp)
 
@@ -32,7 +32,7 @@ func (cs *contentHandler) PostContent() echo.HandlerFunc {
 			c.JSON(http.StatusBadRequest, "tidak bisa membaca input")
 		}
 
-		data, err := cs.contentCases.Posting(userID, temp.ToModel())
+		data, err := cs.contentCases.Posting(temp.ToModel())
 		if err != nil {
 			log.Println("tidak memproses data", err)
 			c.JSON(http.StatusInternalServerError, err)
@@ -117,6 +117,27 @@ func (cs *contentHandler) Delete() echo.HandlerFunc {
 		}
 		return c.JSON(http.StatusOK, map[string]interface{}{
 			"message": "success delete content",
+		})
+	}
+}
+
+func (cs *contentHandler) GetAllContent() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		data, err := cs.contentCases.GetAllContent()
+
+		if err != nil {
+			if strings.Contains(err.Error(), "not found") {
+				log.Println("User Handler", err)
+				c.JSON(http.StatusNotFound, err.Error())
+			} else if strings.Contains(err.Error(), "retrieve") {
+				log.Println("User Handler", err)
+				c.JSON(http.StatusInternalServerError, err.Error())
+			}
+		}
+
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "success get all user data",
+			"data":    data,
 		})
 	}
 }

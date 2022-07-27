@@ -1,41 +1,52 @@
 package data
 
 import (
-	"fmt"
+	"errors"
 	"log"
 
 	"github.com/AltaProject/AltaSocialMedia/domain"
 	"gorm.io/gorm"
 )
 
-type contentData struct {
+type ContentData struct {
 	db *gorm.DB
 }
 
 func New(db *gorm.DB) domain.ContentData {
-	return &contentData{
+	return &ContentData{
 		db: db,
 	}
 }
 
-func (cd *contentData) AddNewContent(userID int, newContent domain.Content) (domain.Content, error) {
-	fmt.Println("new content isi :", newContent)
+func (cd *ContentData) AddNewContent(newContent domain.Content) (domain.Content, error) {
 	var cnv = ToLocalContent(newContent)
-
-	cnv.UserID = 3
-
 	err := cd.db.Create(&cnv).Error
 
-	fmt.Println("isi dari cnv :", cnv)
 	if err != nil {
 		log.Println("tidak bisa register", err.Error())
 		return domain.Content{}, err
 	}
-	fmt.Println("isi dari cnv.toDomain :", cnv.toDomainContent())
 	return cnv.toDomainContent(), nil
 }
 
-func (cd *contentData) GetContentId(contenId int) (domain.Content, error) {
+func (cd *ContentData) GetAllContent() ([]domain.Content, error) {
+	var tmp []Content
+	err := cd.db.Find(&tmp).Error
+
+	if err != nil {
+		log.Println("Cannot retrive object", err.Error())
+		return nil, errors.New("cannot retrieve data")
+	}
+
+	if len(tmp) == 0 {
+		log.Println("No data found", gorm.ErrRecordNotFound.Error())
+		return nil, gorm.ErrRecordNotFound
+	}
+
+	return ParseArrDomainContent(tmp), nil
+}
+
+func (cd *ContentData) GetContentId(contenId int) (domain.Content, error) {
 	var temp Content
 	err := cd.db.Where("ID = ?", contenId).First(&temp).Error
 	if err != nil {
@@ -45,7 +56,7 @@ func (cd *contentData) GetContentId(contenId int) (domain.Content, error) {
 	return temp.toDomainContent(), nil
 }
 
-func (cd *contentData) Update(contentId int, newContent domain.Content) (domain.Content, error) {
+func (cd *ContentData) Update(contentId int, newContent domain.Content) (domain.Content, error) {
 	var content = ToLocalContent(newContent)
 	err := cd.db.Model(&Content{}).Where("ID = ?", content.ID).Updates(content)
 	if err.Error != nil {
@@ -62,7 +73,7 @@ func (cd *contentData) Update(contentId int, newContent domain.Content) (domain.
 
 }
 
-func (cd *contentData) Delete(contentId int) bool {
+func (cd *ContentData) Delete(contentId int) bool {
 	err := cd.db.Where("ID = ?", contentId).Delete(&Content{})
 	if err.Error != nil {
 		log.Println("cannot delete content", err.Error.Error())

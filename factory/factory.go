@@ -9,6 +9,10 @@ import (
 	cDelivery "github.com/AltaProject/AltaSocialMedia/feature/content/delivery"
 	cs "github.com/AltaProject/AltaSocialMedia/feature/content/usecase"
 
+	commData "github.com/AltaProject/AltaSocialMedia/feature/content/data"
+	commDeliver "github.com/AltaProject/AltaSocialMedia/feature/content/delivery"
+	commCase "github.com/AltaProject/AltaSocialMedia/feature/content/usecase"
+
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
@@ -25,5 +29,10 @@ func InitFactory(e *echo.Echo, db *gorm.DB) {
 	cCase := cs.New(cData, valid)
 	cHandler := cDelivery.New(cCase)
 	cDelivery.RouteContent(e, cHandler)
+
+	comD := commData.New(db)
+	comC := commCase.New(comD, valid)
+	comHandler := commDeliver.New(comC)
+	cDelivery.RouteContent(e, comHandler)
 
 }

@@ -1,13 +1,21 @@
 package data
 
-import "github.com/AltaProject/AltaSocialMedia/domain"
+import (
+	"github.com/AltaProject/AltaSocialMedia/domain"
+	// "github.com/AltaProject/AltaSocialMedia/feature/comment/data"
+)
 
 type Content struct {
 	ID      int    `json:"id" form:"id" gorm:"primaryKey:autoIncrement"`
+<<<<<<< HEAD
 	Content string `json:"content" form:"content" validate:"required"`
 	UserID  int
 	// User    User
 	// Description string `json:"username" form:"username"`
+=======
+	Content string `json:"content" form:"content"`
+	UserID  int
+>>>>>>> ac04ca53f27afc5f71e6338e4b1c9b9f0322840d
 }
 
 // type User struct {
