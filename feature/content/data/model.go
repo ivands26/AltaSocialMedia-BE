@@ -6,14 +6,14 @@ type Content struct {
 	ID      int    `json:"id" form:"id" gorm:"primaryKey:autoIncrement"`
 	Content string `json:"nama" form:"nama" validate:"required"`
 	// Description string `json:"username" form:"username"`
-	UserID int
+	// UserID int
 }
 
 func (content *Content) toDomainContent() domain.Content {
 	return domain.Content{
 		ID:      int(content.ID),
 		Content: content.Content,
-		UserID:  content.UserID,
+		// UserID:  content.UserID,
 	}
 }
 
@@ -30,6 +30,6 @@ func ToLocalContent(data domain.Content) Content {
 	var res Content
 	res.ID = int(data.ID)
 	res.Content = data.Content
-	res.UserID = data.UserID
+	// res.UserID = data.UserID
 	return res
 }

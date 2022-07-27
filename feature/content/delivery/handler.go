@@ -4,24 +4,19 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/AltaProject/AltaSocialMedia/config"
 	"github.com/AltaProject/AltaSocialMedia/domain"
 	"github.com/AltaProject/AltaSocialMedia/feature/common"
-	"github.com/AltaProject/AltaSocialMedia/feature/content/delivery/middlewares"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
 )
 
 type contentHandler struct {
 	contentCases domain.ContentUseCases
 }
 
-func New(e *echo.Echo, cs domain.ContentUseCases) {
-	handler := &contentHandler{
+func New(cs domain.ContentUseCases) domain.ContentHandler {
+	return &contentHandler{
 		contentCases: cs,
 	}
-	e.POST("/content/:id", handler.PostContent(), middleware.JWTWithConfig(middlewares.UseJWT([]byte(config.SECRET))))
-	e.GET("/content/:id", handler.GetSpecificContent(), middleware.JWTWithConfig(middlewares.UseJWT([]byte(config.SECRET))))
 }
 
 func (cs *contentHandler) PostContent() echo.HandlerFunc {
@@ -63,5 +58,37 @@ func (cs *contentHandler) GetSpecificContent() echo.HandlerFunc {
 			"message": "data ditemukan",
 			"data":    data,
 		})
+	}
+}
+
+func (cs *contentHandler) Update() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		var tmp PostingFormat
+		result := c.Bind(&tmp)
+
+		qry := map[string]interface{}{}
+		id := common.ExtractData(c)
+
+		if result != nil {
+			log.Println("Cannot Parse Data", result)
+			c.JSON(http.StatusBadRequest, "error read update")
+		}
+
+		if tmp.Content != "" {
+			qry["content"] = tmp.Content
+		}
+
+		data, err := cs.contentCases.Update(id, tmp.ToModel())
+
+		if err != nil {
+			log.Println("Cannot Update Content", err)
+			c.JSON(http.StatusInternalServerError, err)
+		}
+
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"data":    data,
+			"message": "Update Contect Success",
+		})
+
 	}
 }
