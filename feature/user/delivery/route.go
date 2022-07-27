@@ -1,17 +1,16 @@
 package delivery
 
-// import (
-// 	"github.com/AltaProject/AltaSocialMedia/domain"
+import (
+	"github.com/AltaProject/AltaSocialMedia/config"
+	"github.com/AltaProject/AltaSocialMedia/domain"
+	"github.com/AltaProject/AltaSocialMedia/feature/user/delivery/middlewares"
 
-// 	"github.com/labstack/echo/v4"
-// 	"github.com/labstack/echo/v4/middleware"
-// )
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
+)
 
-// func RoutesUser(e *echo.Echo, uc domain.UserHandler) {
-// 	// e.Pre(middleware.RemoveTrailingSlash())
-
-// 	// e.Use(middleware.CORS())
-
-// 	e.POST("/user", uc.Register())
-// 	e.GET("/user/:userID", uc.GetSpecificUser(), middleware.JWTWithConfig(middleware.JWTConfig{SigningKey: []byte("ALTASOSMED")}))
-// }
+func RouteUser(e *echo.Echo, bu domain.UserHandler) {
+	e.POST("/login", bu.Login())
+	e.POST("/register", bu.Register())
+	e.GET("/profile", bu.GetSpecificUser(), middleware.JWTWithConfig(middlewares.UseJWT([]byte(config.SECRET))))
+}

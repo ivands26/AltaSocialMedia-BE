@@ -36,3 +36,20 @@ func (cd *contentData) GetContentId(contenId int) (domain.Content, error) {
 	}
 	return temp.toDomainContent(), nil
 }
+
+func (cd *contentData) Update(userId int, newContent domain.Content) (domain.Content, error) {
+	var content = ToLocalContent(newContent)
+	err := cd.db.Model(&Content{}).Where("ID = ?", content.ID).Updates(content)
+	if err.Error != nil {
+		log.Println("cant update content", err.Error.Error())
+		return domain.Content{}, nil
+	}
+
+	if err.RowsAffected == 0 {
+		log.Println("Content Not Updated")
+		return domain.Content{}, nil
+
+	}
+	return content.toDomainContent(), nil
+
+}

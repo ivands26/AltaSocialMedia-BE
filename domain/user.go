@@ -4,16 +4,17 @@ import "github.com/labstack/echo/v4"
 
 type User struct {
 	ID       int
-	Nama     string `validate:"requered"`
-	Username string `validate:"requered"`
-	Email    string `validate:"requered"`
-	Password string `validate:"requered"`
+	Nama     string `validate:"required"`
+	Username string `validate:"required"`
+	Email    string `validate:"required"`
+	Password string `validate:"required"`
 	No_HP    string
 }
 
 type UserHandler interface {
 	Register() echo.HandlerFunc
 	GetSpecificUser() echo.HandlerFunc
+	Login() echo.HandlerFunc
 }
 
 type UserUseCases interface {

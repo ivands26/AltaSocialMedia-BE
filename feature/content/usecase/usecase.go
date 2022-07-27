@@ -55,3 +55,14 @@ func (cd *contentUseCase) GetContentId(contentId int) (domain.Content, error) {
 	}
 	return data, nil
 }
+
+func (cd *contentUseCase) Update(userId int, newContent domain.Content) (domain.Content, error) {
+	update, err := cd.dataContent.Update(userId, newContent)
+
+	if err != nil {
+		log.Println(err.Error())
+		return domain.Content{}, err
+	}
+
+	return update, nil
+}

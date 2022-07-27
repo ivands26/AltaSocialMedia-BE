@@ -4,25 +4,19 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/AltaProject/AltaSocialMedia/config"
 	"github.com/AltaProject/AltaSocialMedia/domain"
 	"github.com/AltaProject/AltaSocialMedia/feature/common"
-	"github.com/AltaProject/AltaSocialMedia/feature/user/delivery/middlewares"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
 )
 
 type userHandler struct {
 	userUsecase domain.UserUseCases
 }
 
-func New(e *echo.Echo, us domain.UserUseCases) {
-	handler := &userHandler{
+func New(us domain.UserUseCases) domain.UserHandler {
+	return &userHandler{
 		userUsecase: us,
 	}
-	e.POST("/login", handler.Login())
-	e.POST("/register", handler.Register())
-	e.GET("/profile", handler.GetSpecificUser(), middleware.JWTWithConfig(middlewares.UseJWT([]byte(config.SECRET))))
 }
 
 func (us *userHandler) Register() echo.HandlerFunc {
