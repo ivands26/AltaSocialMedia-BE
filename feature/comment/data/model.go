@@ -11,8 +11,10 @@ type Comment struct {
 
 func (comm *Comment) ToModel() domain.Comment {
 	return domain.Comment{
-		ID:      comm.ID,
-		Comment: comm.Comment,
+		ID:        comm.ID,
+		Comment:   comm.Comment,
+		UserID:    comm.UserID,
+		ContentID: comm.ContentID,
 	}
 }
 
@@ -28,5 +30,8 @@ func ParseToArr(arr []Comment) []domain.Comment {
 func FromModel(data domain.Comment) Comment {
 	var res Comment
 	res.Comment = data.Comment
+	res.ID = data.ID
+	res.ContentID = data.ContentID
+	res.UserID = data.UserID
 	return res
 }

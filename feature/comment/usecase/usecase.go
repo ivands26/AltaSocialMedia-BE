@@ -33,3 +33,18 @@ func (cd *commentUseCase) GetAllComment() ([]domain.Comment, error) {
 	}
 	return data, nil
 }
+
+func (cd *commentUseCase) PostingComment(userID int, newComment domain.Comment) (domain.Comment, error) {
+	if userID == -1 {
+		return domain.Comment{}, errors.New("invalid user")
+	}
+
+	newComment.UserID = userID
+	posting, err := cd.dataComment.PostComment(newComment)
+
+	if err != nil {
+		log.Println(err.Error())
+		return domain.Comment{}, err
+	}
+	return posting, nil
+}

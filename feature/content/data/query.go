@@ -2,6 +2,7 @@ package data
 
 import (
 	"errors"
+	"fmt"
 	"log"
 
 	"github.com/AltaProject/AltaSocialMedia/domain"
@@ -47,17 +48,19 @@ func (cd *ContentData) GetAllContent() ([]domain.Content, error) {
 
 func (cd *ContentData) GetContentId(contenId int) (domain.Content, error) {
 	var temp Content
-	err := cd.db.Where("ID = ?", contenId).First(&temp).Error
+	fmt.Println("contenId :", contenId)
+	err := cd.db.Where("id = ?", contenId).First(&temp).Error
 	if err != nil {
 		log.Println("Data bermasalah / tidak ditemukan", err.Error())
 		return domain.Content{}, err
 	}
+	fmt.Println("isi dari temp :", temp.toDomainContent())
 	return temp.toDomainContent(), nil
 }
 
 func (cd *ContentData) Update(contentId int, newContent domain.Content) (domain.Content, error) {
 	var content = ToLocalContent(newContent)
-	err := cd.db.Model(&Content{}).Where("ID = ?", content.ID).Updates(content)
+	err := cd.db.Model(&Content{}).Where("ID = ?", contentId).Updates(content)
 	if err.Error != nil {
 		log.Println("cant update content", err.Error.Error())
 		return domain.Content{}, nil

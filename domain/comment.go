@@ -9,20 +9,25 @@ type Comment struct {
 	UserID    int
 }
 
+// Error implements error
+func (Comment) Error() string {
+	panic("unimplemented")
+}
+
 type CommentHandler interface {
 	GetAllComment() echo.HandlerFunc
-	// PostCommentId() echo.HandlerFunc
+	PostComment() echo.HandlerFunc
 	// DeleteComment() echo.HandlerFunc
 }
 
 type CommentUseCases interface {
-	// InsertComment(newComment Comment, contentID int) (Comment, error)
+	PostingComment(userID int, newComment Comment) (Comment, error)
 	GetAllComment() ([]Comment, error)
 	// DeleteComment(commentID int) (Comment, error)
 }
 
 type DataComment interface {
-	// AddComment(newComment Comment, contentID int) (Comment, error)
+	PostComment(newComment Comment) (Comment, error)
 	GetAllComment() ([]Comment, error)
 	// DeleteComment(commentID int) (Comment, error)
 }

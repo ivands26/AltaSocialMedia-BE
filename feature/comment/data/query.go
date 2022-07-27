@@ -18,9 +18,9 @@ func New(db *gorm.DB) domain.DataComment {
 	}
 }
 
-func (cd *CommentData) GetAllComment() ([]domain.Comment, error) {
+func (cdd *CommentData) GetAllComment() ([]domain.Comment, error) {
 	var tmp []Comment
-	err := cd.db.Find(&tmp).Error
+	err := cdd.db.Find(&tmp).Error
 
 	if err != nil {
 		log.Println("Cannot retrive object", err.Error())
@@ -33,4 +33,14 @@ func (cd *CommentData) GetAllComment() ([]domain.Comment, error) {
 	}
 
 	return ParseToArr(tmp), nil
+}
+
+func (cdd *CommentData) PostComment(newComment domain.Comment) (comment domain.Comment, err error) {
+	var cnv = FromModel(newComment)
+	err = cdd.db.Create(&cnv).Error
+	if err != nil {
+		log.Println("comment gagal diinput", err.Error())
+		return domain.Comment{}, err
+	}
+	return cnv.ToModel(), nil
 }

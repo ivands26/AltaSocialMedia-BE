@@ -48,7 +48,9 @@ func (cs *contentHandler) PostContent() echo.HandlerFunc {
 
 func (cs *contentHandler) GetSpecificContent() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		id := common.ExtractData(c)
+		idCon := c.Param("id")
+		id, _ := strconv.Atoi(idCon)
+		// id := common.ExtractData(c.Param())
 
 		data, err := cs.contentCases.GetContentId(id)
 
@@ -67,19 +69,13 @@ func (cs *contentHandler) Update() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var tmp PostingFormat
 		result := c.Bind(&tmp)
-
-		qry := map[string]interface{}{}
-		id := common.ExtractData(c)
+		idCon := c.Param("id")
+		id, _ := strconv.Atoi(idCon)
 
 		if result != nil {
 			log.Println("Cannot Parse Data", result)
 			c.JSON(http.StatusBadRequest, "error read update")
 		}
-
-		if tmp.Content != "" {
-			qry["content"] = tmp.Content
-		}
-
 		data, err := cs.contentCases.Update(id, tmp.ToModel())
 
 		if err != nil {

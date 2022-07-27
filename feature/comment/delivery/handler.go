@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/AltaProject/AltaSocialMedia/domain"
+	"github.com/AltaProject/AltaSocialMedia/feature/common"
 	"github.com/labstack/echo/v4"
 )
 
@@ -34,6 +35,31 @@ func (cs *commentHandler) GetAllComment() echo.HandlerFunc {
 
 		return c.JSON(http.StatusOK, map[string]interface{}{
 			"message": "success get all user data",
+			"data":    data,
+		})
+	}
+}
+
+func (cs *commentHandler) PostComment() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		userId := common.ExtractData(c)
+		var temp CommentFormat
+		err := c.Bind(&temp)
+
+		if err != nil {
+			log.Println("Tidak bisa parse data", err)
+			c.JSON(http.StatusBadRequest, "tidak bisa membaca input")
+		}
+
+		data, err := cs.commentCases.PostingComment(userId, temp.ToModel())
+
+		if err != nil {
+			log.Println("tidak memproses data", err)
+			c.JSON(http.StatusInternalServerError, err)
+		}
+
+		return c.JSON(http.StatusCreated, map[string]interface{}{
+			"message": "berhasil register data",
 			"data":    data,
 		})
 	}

@@ -50,8 +50,12 @@ func (cd *contentUseCase) GetContentId(contentId int) (domain.Content, error) {
 }
 
 func (cd *contentUseCase) Update(contentId int, newContent domain.Content) (domain.Content, error) {
-	update, err := cd.dataContent.Update(contentId, newContent)
+	res, _ := cd.dataContent.GetContentId(contentId)
 
+	update, err := cd.dataContent.Update(contentId, newContent)
+	update.UserID = res.UserID
+	update.ID = res.ID
+	update.Content = newContent.Content
 	if err != nil {
 		log.Println(err.Error())
 		return domain.Content{}, err

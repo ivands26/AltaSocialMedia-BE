@@ -9,6 +9,7 @@ import (
 )
 
 func RouteComment(e *echo.Echo, ch domain.CommentHandler) {
-	e.GET("/comment/:id", ch.GetAllComment(), middleware.JWTWithConfig(middlewares.UseJWT([]byte(config.SECRET))))
 
+	e.POST("/comment", ch.PostComment(), middleware.JWTWithConfig(middlewares.UseJWT([]byte(config.SECRET))))
+	e.GET("/comment/:id", ch.GetAllComment(), middleware.JWTWithConfig(middlewares.UseJWT([]byte(config.SECRET))))
 }
