@@ -22,18 +22,6 @@ func New(cd domain.ContentData, v *validator.Validate) domain.ContentUseCases {
 }
 
 func (cd *contentUseCase) Posting(newContent domain.Content) (domain.Content, error) {
-	// var conv = data.FromModel(newUser)
-	// err := ud.valid.Struct(conv)
-	// if err != nil {
-	// 	log.Println("Error Validasi", err)
-	// 	return domain.User{}, err
-	// }
-	// hashed, err := bcrypt.GenerateFromPassword([]byte(newUser.Password), bcrypt.DefaultCost)
-	// if err != nil {
-	// 	log.Println("gagal enkripsi password", err)
-	// 	return domain.User{}, err
-	// }
-	// newUser.Password = string(hashed)
 	posting, err := cd.dataContent.AddNewContent(newContent)
 
 	if err != nil {
@@ -75,3 +63,16 @@ func (cd *contentUseCase) Delete(contentId int) (bool, error) {
 	}
 	return true, nil
 }
+
+func (cd *contentUseCase) GetAllContent() ([]domain.Content, error) {
+	data, err := cd.dataContent.GetAllContent()
+
+// 	if err == gorm.ErrRecordNotFound {
+// 		log.Println("User Usecase", err.Error())
+// 		return nil, gorm.ErrRecordNotFound
+// 	} else if err != nil {
+// 		log.Println("User Usecase", err.Error())
+// 		return nil, errors.New("error when retrieve data")
+// 	}
+// 	return data, nil
+// }

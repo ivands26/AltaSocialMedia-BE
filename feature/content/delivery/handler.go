@@ -121,3 +121,24 @@ func (cs *contentHandler) Delete() echo.HandlerFunc {
 		})
 	}
 }
+
+func (cs *contentHandler) GetAllContent() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		data, err := cs.contentCases.GetAllContent()
+
+		if err != nil {
+			if strings.Contains(err.Error(), "not found") {
+				log.Println("User Handler", err)
+				c.JSON(http.StatusNotFound, err.Error())
+			} else if strings.Contains(err.Error(), "retrieve") {
+				log.Println("User Handler", err)
+				c.JSON(http.StatusInternalServerError, err.Error())
+			}
+		}
+
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "success get all user data",
+			"data":    data,
+		})
+	}
+}

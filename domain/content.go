@@ -11,6 +11,7 @@ type Content struct {
 
 type ContentHandler interface {
 	PostContent() echo.HandlerFunc
+	GetAllContent() echo.HandlerFunc
 	GetSpecificContent() echo.HandlerFunc
 	Update() echo.HandlerFunc
 	Delete() echo.HandlerFunc
@@ -19,12 +20,14 @@ type ContentHandler interface {
 type ContentUseCases interface {
 	Posting(newContent Content) (Content, error)
 	GetContentId(contentId int) (Content, error)
+	GetAllContent() ([]Content, error)
 	Update(userId int, newContent Content) (Content, error)
 	Delete(contentId int) (bool, error)
 }
 
 type ContentData interface {
 	AddNewContent(newContent Content) (Content, error)
+	GetAllContent() ([]Content, error)
 	GetContentId(contentId int) (Content, error)
 	Update(userId int, newContent Content) (Content, error)
 	Delete(contentId int) bool
