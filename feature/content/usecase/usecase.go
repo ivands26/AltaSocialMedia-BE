@@ -67,12 +67,12 @@ func (cd *contentUseCase) Delete(contentId int) (bool, error) {
 func (cd *contentUseCase) GetAllContent() ([]domain.Content, error) {
 	data, err := cd.dataContent.GetAllContent()
 
-// 	if err == gorm.ErrRecordNotFound {
-// 		log.Println("User Usecase", err.Error())
-// 		return nil, gorm.ErrRecordNotFound
-// 	} else if err != nil {
-// 		log.Println("User Usecase", err.Error())
-// 		return nil, errors.New("error when retrieve data")
-// 	}
-// 	return data, nil
-// }
+	if err == gorm.ErrRecordNotFound {
+		log.Println("User Usecase", err.Error())
+		return nil, gorm.ErrRecordNotFound
+	} else if err != nil {
+		log.Println("User Usecase", err.Error())
+		return nil, errors.New("error when retrieve data")
+	}
+	return data, nil
+}
