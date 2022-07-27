@@ -4,7 +4,7 @@ import "github.com/AltaProject/AltaSocialMedia/domain"
 
 type Content struct {
 	ID      int    `json:"id" form:"id" gorm:"primaryKey:autoIncrement"`
-	Content string `json:"nama" form:"nama" validate:"required"`
+	Content string `json:"content" form:"content" validate:"required"`
 	// Description string `json:"username" form:"username"`
 	// UserID int
 }

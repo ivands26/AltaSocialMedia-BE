@@ -56,8 +56,8 @@ func (cd *contentUseCase) GetContentId(contentId int) (domain.Content, error) {
 	return data, nil
 }
 
-func (cd *contentUseCase) Update(userId int, newContent domain.Content) (domain.Content, error) {
-	update, err := cd.dataContent.Update(userId, newContent)
+func (cd *contentUseCase) Update(contentId int, newContent domain.Content) (domain.Content, error) {
+	update, err := cd.dataContent.Update(contentId, newContent)
 
 	if err != nil {
 		log.Println(err.Error())
@@ -65,4 +65,13 @@ func (cd *contentUseCase) Update(userId int, newContent domain.Content) (domain.
 	}
 
 	return update, nil
+}
+
+func (cd *contentUseCase) Delete(contentId int) (bool, error) {
+	res := cd.dataContent.Delete(contentId)
+
+	if !res {
+		return false, errors.New("failed to delete content")
+	}
+	return true, nil
 }
