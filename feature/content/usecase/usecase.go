@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"errors"
+	"fmt"
 	"log"
 
 	"github.com/AltaProject/AltaSocialMedia/domain"
@@ -21,7 +22,7 @@ func New(cd domain.ContentData, v *validator.Validate) domain.ContentUseCases {
 	}
 }
 
-func (cd *contentUseCase) Posting(newContent domain.Content) (domain.Content, error) {
+func (cd *contentUseCase) Posting(userID int, newContent domain.Content) (domain.Content, error) {
 	// var conv = data.FromModel(newUser)
 	// err := ud.valid.Struct(conv)
 	// if err != nil {
@@ -34,7 +35,8 @@ func (cd *contentUseCase) Posting(newContent domain.Content) (domain.Content, er
 	// 	return domain.User{}, err
 	// }
 	// newUser.Password = string(hashed)
-	posting, err := cd.dataContent.AddNewContent(newContent)
+	fmt.Println("id user :", userID)
+	posting, err := cd.dataContent.AddNewContent(userID, newContent)
 
 	if err != nil {
 		log.Println(err.Error())
@@ -57,6 +59,11 @@ func (cd *contentUseCase) GetContentId(contentId int) (domain.Content, error) {
 }
 
 func (cd *contentUseCase) Update(contentId int, newContent domain.Content) (domain.Content, error) {
+	UpdContent := map[string]interface{}{}
+	if newContent.Content != "" {
+		UpdContent["content"] = newContent.Content
+	}
+
 	update, err := cd.dataContent.Update(contentId, newContent)
 
 	if err != nil {

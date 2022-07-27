@@ -23,7 +23,7 @@ func New(cs domain.ContentUseCases) domain.ContentHandler {
 
 func (cs *contentHandler) PostContent() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		//userId := common.ExtractData(c)
+		userID := common.ExtractData(c)
 		var temp PostingFormat
 		err := c.Bind(&temp)
 
@@ -32,8 +32,7 @@ func (cs *contentHandler) PostContent() echo.HandlerFunc {
 			c.JSON(http.StatusBadRequest, "tidak bisa membaca input")
 		}
 
-		data, err := cs.contentCases.Posting(temp.ToModel())
-
+		data, err := cs.contentCases.Posting(userID, temp.ToModel())
 		if err != nil {
 			log.Println("tidak memproses data", err)
 			c.JSON(http.StatusInternalServerError, err)
@@ -41,7 +40,7 @@ func (cs *contentHandler) PostContent() echo.HandlerFunc {
 
 		return c.JSON(http.StatusCreated, map[string]interface{}{
 			"message": "berhasil register data",
-			"data":    data,
+			"data":    FromDomain(data),
 		})
 	}
 }

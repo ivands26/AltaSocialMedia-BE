@@ -2,18 +2,16 @@ package data
 
 import (
 	"github.com/AltaProject/AltaSocialMedia/domain"
-	// "github.com/AltaProject/AltaSocialMedia/feature/content/data"
 	// "gorm.io/gorm"
 )
 
 type User struct {
 	ID       int    `json:"id" form:"id" gorm:"primaryKey:autoIncrement"`
 	Nama     string `json:"nama" form:"nama" validate:"required"`
-	Username string `json:"username" form:"username"`
-	Email    string `json:"email" form:"email" validate:"required"`
+	Username string `json:"username" form:"username" gorm:"unique"`
+	Email    string `json:"email" form:"email" validate:"required" gorm:"unique"`
 	Password string `json:"password" form:"password" validate:"required"`
 	No_HP    string `json:"no_hp" form:"no_hp"`
-	// MyContent []data.Content `gorm:"foreignKey:userID"`
 }
 
 func (u *User) ToModel() domain.User {

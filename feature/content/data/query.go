@@ -1,6 +1,7 @@
 package data
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/AltaProject/AltaSocialMedia/domain"
@@ -17,13 +18,20 @@ func New(db *gorm.DB) domain.ContentData {
 	}
 }
 
-func (cd *contentData) AddNewContent(newContent domain.Content) (domain.Content, error) {
+func (cd *contentData) AddNewContent(userID int, newContent domain.Content) (domain.Content, error) {
+	fmt.Println("new content isi :", newContent)
 	var cnv = ToLocalContent(newContent)
+
+	cnv.UserID = 3
+
 	err := cd.db.Create(&cnv).Error
+
+	fmt.Println("isi dari cnv :", cnv)
 	if err != nil {
 		log.Println("tidak bisa register", err.Error())
 		return domain.Content{}, err
 	}
+	fmt.Println("isi dari cnv.toDomain :", cnv.toDomainContent())
 	return cnv.toDomainContent(), nil
 }
 

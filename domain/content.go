@@ -17,14 +17,14 @@ type ContentHandler interface {
 }
 
 type ContentUseCases interface {
-	Posting(newContent Content) (Content, error)
+	Posting(userID int, newContent Content) (Content, error)
 	GetContentId(contentId int) (Content, error)
 	Update(userId int, newContent Content) (Content, error)
 	Delete(contentId int) (bool, error)
 }
 
 type ContentData interface {
-	AddNewContent(newContent Content) (Content, error)
+	AddNewContent(userID int, newContent Content) (Content, error)
 	GetContentId(contentId int) (Content, error)
 	Update(userId int, newContent Content) (Content, error)
 	Delete(contentId int) bool
