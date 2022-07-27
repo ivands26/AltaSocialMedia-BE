@@ -23,7 +23,7 @@ func New(cs domain.ContentUseCases) domain.ContentHandler {
 
 func (cs *contentHandler) PostContent() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		//userId := common.ExtractData(c)
+		userId := common.ExtractData(c)
 		var temp PostingFormat
 		err := c.Bind(&temp)
 
@@ -32,7 +32,7 @@ func (cs *contentHandler) PostContent() echo.HandlerFunc {
 			c.JSON(http.StatusBadRequest, "tidak bisa membaca input")
 		}
 
-		data, err := cs.contentCases.Posting(temp.ToModel())
+		data, err := cs.contentCases.Posting(userId, temp.ToModel())
 
 		if err != nil {
 			log.Println("tidak memproses data", err)
