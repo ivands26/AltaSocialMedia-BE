@@ -13,16 +13,19 @@ type ContentHandler interface {
 	PostContent() echo.HandlerFunc
 	GetSpecificContent() echo.HandlerFunc
 	Update() echo.HandlerFunc
+	Delete() echo.HandlerFunc
 }
 
 type ContentUseCases interface {
 	Posting(newContent Content) (Content, error)
 	GetContentId(contentId int) (Content, error)
 	Update(userId int, newContent Content) (Content, error)
+	Delete(contentId int) (bool, error)
 }
 
 type ContentData interface {
 	AddNewContent(newContent Content) (Content, error)
 	GetContentId(contentId int) (Content, error)
 	Update(userId int, newContent Content) (Content, error)
+	Delete(contentId int) bool
 }

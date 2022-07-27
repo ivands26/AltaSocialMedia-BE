@@ -3,6 +3,8 @@ package delivery
 import (
 	"log"
 	"net/http"
+	"strconv"
+	"strings"
 
 	"github.com/AltaProject/AltaSocialMedia/domain"
 	"github.com/AltaProject/AltaSocialMedia/feature/common"
@@ -90,5 +92,32 @@ func (cs *contentHandler) Update() echo.HandlerFunc {
 			"message": "Update Contect Success",
 		})
 
+	}
+}
+
+func (cs *contentHandler) Delete() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		cnv, err := strconv.Atoi(c.Param("id"))
+		if err != nil {
+			log.Println("cannot convert to int", err.Error())
+			return c.JSON(http.StatusInternalServerError, "cannot convert id")
+		}
+
+		data, err := cs.contentCases.Delete(cnv)
+
+		if err != nil {
+			if strings.Contains(err.Error(), "not found") {
+				return c.JSON(http.StatusNotFound, err.Error())
+			} else {
+				return c.JSON(http.StatusInternalServerError, err.Error())
+			}
+		}
+
+		if !data {
+			return c.JSON(http.StatusInternalServerError, "cannot delete")
+		}
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "success delete content",
+		})
 	}
 }

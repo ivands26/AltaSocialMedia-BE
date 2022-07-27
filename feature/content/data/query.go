@@ -37,7 +37,7 @@ func (cd *contentData) GetContentId(contenId int) (domain.Content, error) {
 	return temp.toDomainContent(), nil
 }
 
-func (cd *contentData) Update(userId int, newContent domain.Content) (domain.Content, error) {
+func (cd *contentData) Update(contentId int, newContent domain.Content) (domain.Content, error) {
 	var content = ToLocalContent(newContent)
 	err := cd.db.Model(&Content{}).Where("ID = ?", content.ID).Updates(content)
 	if err.Error != nil {
@@ -52,4 +52,18 @@ func (cd *contentData) Update(userId int, newContent domain.Content) (domain.Con
 	}
 	return content.toDomainContent(), nil
 
+}
+
+func (cd *contentData) Delete(contentId int) bool {
+	err := cd.db.Where("ID = ?", contentId).Delete(&Content{})
+	if err.Error != nil {
+		log.Println("cannot delete content", err.Error.Error())
+		return false
+	}
+	if err.RowsAffected < 1 {
+		log.Println("No content deleted", err.Error.Error())
+		return false
+	}
+
+	return true
 }
