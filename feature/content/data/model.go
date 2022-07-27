@@ -9,7 +9,6 @@ type Content struct {
 	ID      int    `json:"id" form:"id" gorm:"primaryKey:autoIncrement"`
 	Content string `json:"content" form:"content"`
 	UserID  int
-	// Comment []data.Comment `gorm:"foreignKey:ContentID;references:ID"`
 }
 
 func (content *Content) toDomainContent() domain.Content {
