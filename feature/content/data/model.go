@@ -1,12 +1,15 @@
 package data
 
-import "github.com/AltaProject/AltaSocialMedia/domain"
+import (
+	"github.com/AltaProject/AltaSocialMedia/domain"
+	// "github.com/AltaProject/AltaSocialMedia/feature/comment/data"
+)
 
 type Content struct {
 	ID      int    `json:"id" form:"id" gorm:"primaryKey:autoIncrement"`
-	Content string `json:"content" form:"content" validate:"required"`
-	// Description string `json:"username" form:"username"`
-	// UserID int
+	Content string `json:"content" form:"content"`
+	UserID  int
+	// Comment []data.Comment `gorm:"foreignKey:ContentID;references:ID"`
 }
 
 func (content *Content) toDomainContent() domain.Content {

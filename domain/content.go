@@ -3,9 +3,10 @@ package domain
 import "github.com/labstack/echo/v4"
 
 type Content struct {
-	ID      int
-	Content string
-	UserID  int
+	ID        int
+	Content   string
+	UserID    int
+	CommentID int
 	// Description string
 }
 
